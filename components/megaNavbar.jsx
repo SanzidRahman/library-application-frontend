@@ -4,17 +4,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
+import { FaShoppingCart } from "react-icons/fa";
+import { MdOutlineAccountCircle } from "react-icons/md";
+import Cart from "./Cart";
+
 
 export default function MegaNavbar() {
     const [activeMenu, setActiveMenu] = useState(null);
-
-    const { data: response, loading } = useFetch("http://localhost:8000/api/mega-menu");
-
+    const { data: response, loading } = useFetch("http://localhost:8000/api/mega-menu")
     const menuData = response?.data || { categories: [], authors: [], publishers: [] };
 
     if (loading) {
         return <div className="p-4">Loading...</div>;
     }
+
+
+
 
     const renderSection = (title, items, type, keyField) => (
         <div className="relative">
@@ -28,14 +33,14 @@ export default function MegaNavbar() {
 
             {activeMenu === type && (
                 <div
-                    className=" fixed left-1/2 top-16 -translate-x-1/2 z-50 w-[95vw] max-w-7xl max-h-[75vh] overflow-y-auto rounded-xl border bg-white p-6 shadow-xl"
+                    className=" fixed left-1/2 top-16 -translate-x-1/2 z-50 w-[95vw] max-w-7xl max-h-[75vh] overflow-y-auto  border bg-white p-6 shadow-xl"
                     onMouseEnter={() => setActiveMenu(type)}
                     onMouseLeave={() => setActiveMenu(null)}
                 >
                     {/* Desktop Grid */}
-                    <div className="hidden lg:grid grid-cols-3 gap-6">
+                    <div className="hidden lg:grid grid-cols-5 gap-6">
                         {items.map((item) => (
-                            <div key={item._id} className="rounded-lg border p-4 hover:bg-gray-50">
+                            <div key={item._id} className="rounded-lg border p-2 hover:bg-gray-50">
                                 <h3 className="font-semibold text-green-700 mb-2">
                                     {item[keyField]}
                                 </h3>
@@ -105,12 +110,11 @@ export default function MegaNavbar() {
                         {renderSection("Publishers", menuData.publishers, "publishers", "publisher")}
                     </div>
 
-                    {/* Search */}
-                    <input
-                        type="text"
-                        placeholder="Search books..."
-                        className="hidden md:block w-64 rounded-lg border px-4 py-2"
-                    />
+                    {/* Shopping cart */}
+                    <div className="flex gap-2">
+                        <Cart />
+                        <MdOutlineAccountCircle size={25} className="text-green-700 cursor-pointer" />
+                    </div>
                 </div>
             </div>
         </nav>

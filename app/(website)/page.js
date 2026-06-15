@@ -1,3 +1,4 @@
+import SearchBar from "@/components/HomepageSearch";
 import MegaNavbar from "@/components/megaNavbar";
 import Link from "next/link";
 
@@ -25,7 +26,7 @@ export default async function HomePage() {
 
   return (
     <main>
-      <MegaNavbar />
+
       {/* Hero */}
       <section className="bg-linear-to-r from-teal-600 to-purple-600">
         <div className="mx-auto max-w-7xl px-4 py-24 text-center text-white">
@@ -38,7 +39,8 @@ export default async function HomePage() {
             academics, programmers, and publishers worldwide.
           </p>
 
-          <form
+
+          {/* <form
             action="/books"
             className="mx-auto flex max-w-2xl overflow-hidden rounded-xl bg-white"
           >
@@ -50,12 +52,15 @@ export default async function HomePage() {
             />
 
             <button
-              className="bg-indigo-600 px-8 text-white"
+              className="bg-indigo-600 px-8 text-white cursor-pointer"
               type="submit"
             >
               Search
             </button>
-          </form>
+          </form> */}
+
+
+          <SearchBar />
         </div>
       </section>
 
