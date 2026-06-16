@@ -42,7 +42,7 @@ export default function Sidebar() {
             {menu.submenu ? (
               <button
                 onClick={() => toggleMenu(index)}
-                className="flex items-center gap-3 w-full p-3 rounded hover:bg-gray-800 cursor-pointer transition-all"
+                className="flex items-center gap-3 w-full p-2 rounded hover:bg-gray-800 cursor-pointer transition-all"
               >
                 <menu.icon size={20} />
                 {!collapsed && <span className="text-sm">{menu.title}</span>}

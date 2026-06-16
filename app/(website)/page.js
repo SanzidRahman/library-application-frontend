@@ -1,5 +1,6 @@
 import SearchBar from "@/components/HomepageSearch";
 import MegaNavbar from "@/components/megaNavbar";
+import Image from "next/image";
 import Link from "next/link";
 
 async function getFeaturedBooks() {
@@ -23,6 +24,7 @@ async function getFeaturedBooks() {
 
 export default async function HomePage() {
   const books = await getFeaturedBooks();
+
 
   return (
     <main>
@@ -112,12 +114,14 @@ export default async function HomePage() {
                 key={book._id}
                 className="overflow-hidden rounded-xl bg-white shadow"
               >
-                <img
+                <Image
                   src={
-                    book.coverImage ||
+                    book.media.secureUrl ||
                     "https://placehold.co/400x500"
                   }
                   alt={book.title}
+                  height={300}
+                  width={300}
                   className="h-72 w-full object-cover"
                 />
 

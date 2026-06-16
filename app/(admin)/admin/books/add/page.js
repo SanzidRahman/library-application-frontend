@@ -7,8 +7,10 @@ import { Breadcrumb } from "@/components/Breadcrumb";
 import Select from "@/components/Select";
 import useFetch from "@/hooks/useFetch";
 import { ADMIN_BOOKS_ADD } from "@/lib/AdminPanelRoute";
+import Image from "next/image";
 
 const BooksAddPage = () => {
+    const [preview, setPreview] = useState("");
     const breadcrumbItems = [
         { label: "Admin Dashboard", href: "/admin/dashboard" },
         { label: "Add Books", href: ADMIN_BOOKS_ADD },
@@ -64,11 +66,25 @@ const BooksAddPage = () => {
         publisher: "",
         publicationYear: "",
         price: "",
-        discountPercentage: '',
-        discountPrice: '',
-
+        discountPercentage: "",
+        discountPrice: "",
+        picture: null, // 👈 add
     });
 
+
+    // Handle Media
+    const handleMediaChange = (e) => {
+        const file = e.target.files[0];
+
+        if (file) {
+            setFormData((prev) => ({
+                ...prev,
+                picture: file,
+            }));
+
+            setPreview(URL.createObjectURL(file));
+        }
+    };
 
     // Handle Change
     const handleChange = (e) => {
@@ -79,10 +95,10 @@ const BooksAddPage = () => {
                 ...prev,
                 [name]:
                     type === "number"
-                        ? Number(value)
-                        : typeof value === "string"
-                            ? value
-                            : value,
+                        ? value === ""
+                            ? ""
+                            : Number(value)
+                        : value,
             };
 
             // ✅ Calculate discountPercentage whenever price or discountPrice changes
@@ -98,14 +114,38 @@ const BooksAddPage = () => {
         });
     };
 
+
     // handle Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
+            const data = new FormData();
+
+            data.append("title", formData.title);
+            data.append("category", formData.category);
+            data.append("author", formData.author);
+            data.append("publisher", formData.publisher);
+            data.append("publicationYear", formData.publicationYear);
+            data.append("price", formData.price);
+            data.append("discountPrice", formData.discountPrice);
+            data.append(
+                "discountPercentage",
+                formData.discountPercentage
+            );
+
+            if (formData.picture) {
+                data.append("picture", formData.picture);
+            }
+
             const res = await axios.post(
                 "http://localhost:8000/api/books",
-                formData
+                data,
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
             );
 
             if (res.status !== 201) {
@@ -121,9 +161,12 @@ const BooksAddPage = () => {
                 publisher: "",
                 publicationYear: "",
                 price: "",
-                discountPercentage: '',
-                discountPrice: '',
+                discountPercentage: "",
+                discountPrice: "",
+                picture: null,
             });
+
+            setPreview("");
         } catch (error) {
             console.error(error);
 
@@ -252,6 +295,31 @@ const BooksAddPage = () => {
                         />
                     </div>
 
+                    {/* Book Cover */}
+                    <div className="">
+                        <label className="mb-1 block text-sm font-medium">
+                            Book Cover
+                        </label>
+
+                        <input
+                            type="file"
+                            name="picture"
+                            accept="image/*"
+                            onChange={handleMediaChange}
+                            className="w-full rounded border px-3 py-2 text-white"
+                        />
+
+                        {preview && (
+                            <Image
+                                src={preview}
+                                alt="Preview"
+                                height={200}
+                                width={200}
+                                className="mt-3 h-40 w-32 rounded border object-cover"
+                            />
+                        )}
+                    </div>
+
                     {/* Discount Price */}
                     <div>
                         <label className="mb-1 block text-sm font-medium">
@@ -281,7 +349,6 @@ const BooksAddPage = () => {
                             className="w-full rounded border px-3 py-2 text-white bg-gray-700"
                         />
                     </div>
-
 
                     {/* Submit */}
                     <div className="md:col-span-3">
