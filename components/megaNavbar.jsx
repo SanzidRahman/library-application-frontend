@@ -2,123 +2,171 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
-import useFetch from "@/hooks/useFetch";
+import { Menu, X } from "lucide-react";
 import { MdOutlineAccountCircle } from "react-icons/md";
-import Cart from "./Cart";
 
+import useFetch from "@/hooks/useFetch";
+import Cart from "./Cart";
+import MenuSection from "./MenuSection";
 
 export default function MegaNavbar() {
     const [activeMenu, setActiveMenu] = useState(null);
-    const { data: response, loading } = useFetch("http://localhost:8000/api/mega-menu")
-    const menuData = response?.data || { categories: [], authors: [], publishers: [] };
+    const [mobileOpen, setMobileOpen] = useState(false);
 
-    if (loading) {
-        return <div className="p-4">Loading...</div>;
-    }
-
-
-
-
-    const renderSection = (title, items, type, keyField) => (
-        <div className="relative">
-            <button
-                onMouseEnter={() => setActiveMenu(type)}
-                className="flex items-center gap-1 font-medium hover:text-green-600"
-            >
-                {title}
-                <ChevronDown size={16} />
-            </button>
-
-            {activeMenu === type && (
-                <div
-                    className=" fixed left-1/2 top-16 -translate-x-1/2 z-50 w-[95vw] max-w-7xl max-h-[75vh] overflow-y-auto  border bg-white p-6 shadow-xl"
-                    onMouseEnter={() => setActiveMenu(type)}
-                    onMouseLeave={() => setActiveMenu(null)}
-                >
-                    {/* Desktop Grid */}
-                    <div className="hidden lg:grid grid-cols-5 gap-6">
-                        {items.map((item) => (
-                            <div key={item._id} className="rounded-lg border p-2 hover:bg-gray-50">
-                                <h3 className="font-semibold text-green-700 mb-2">
-                                    {item[keyField]}
-                                </h3>
-                                <ul className="space-y-1">
-                                    {item.books?.slice(0, 6).map((book) => (
-                                        <li key={book._id}>
-                                            <Link
-                                                href={`/books/${book._id}`}
-                                                className="text-sm text-gray-700 hover:text-green-600 truncate block"
-                                            >
-                                                {book.title}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Mobile Drawer Style */}
-                    <div className="lg:hidden fixed inset-0 z-50 bg-white p-6 overflow-y-auto">
-                        <button
-                            onClick={() => setActiveMenu(null)}
-                            className="mb-4 text-red-600 font-semibold"
-                        >
-                            Close
-                        </button>
-                        <h2 className="text-xl font-bold mb-4">{title}</h2>
-                        {items.map((item) => (
-                            <div key={item._id} className="border-b pb-2 mb-3">
-                                <h3 className="font-semibold text-green-700 mb-1">
-                                    {item[keyField]}
-                                </h3>
-                                <ul className="space-y-1">
-                                    {item.books?.map((book) => (
-                                        <li key={book._id}>
-                                            <Link
-                                                href={`/books/${book._id}`}
-                                                className="text-sm text-gray-700 hover:text-green-600 truncate block"
-                                            >
-                                                {book.title}
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )}
-        </div>
+    const { data: response, loading } = useFetch(
+        "http://localhost:8000/api/mega-menu"
     );
 
+    const menuData = response?.data || {
+        categories: [],
+        authors: [],
+        publishers: [],
+    };
+
     return (
-        <nav className="border-b bg-white shadow-sm">
+        <nav className="border-b bg-white shadow-sm sticky top-0 z-50">
             <div className="mx-auto max-w-7xl px-4">
                 <div className="flex h-16 items-center justify-between">
                     {/* Logo */}
-                    <Link href="/" className="text-2xl font-bold text-green-600">
+                    <Link
+                        href="/"
+                        className="text-2xl font-bold text-green-600"
+                    >
                         Library
                     </Link>
 
-                    {/* Mega Menu */}
+                    {/* Desktop Menu */}
                     <div className="hidden lg:flex items-center gap-8">
-                        {renderSection("Categories", menuData.categories, "categories", "category")}
-                        {renderSection("Authors", menuData.authors, "authors", "author")}
-                        {renderSection("Publishers", menuData.publishers, "publishers", "publisher")}
-                        <Link href={"/fundamental-books"}> Fundamental</Link>
-                        <Link href={"/new-books"}> New Books</Link>
-                        <Link href={"/all-books"}> All Books</Link>
+                        {!loading && (
+                            <>
+                                <MenuSection
+                                    title="Categories"
+                                    items={menuData.categories}
+                                    queryKey="category"
+                                    activeMenu={activeMenu}
+                                    setActiveMenu={setActiveMenu}
+                                />
+
+                                <MenuSection
+                                    title="Authors"
+                                    items={menuData.authors}
+                                    queryKey="author"
+                                    activeMenu={activeMenu}
+                                    setActiveMenu={setActiveMenu}
+                                />
+
+                                <MenuSection
+                                    title="Publishers"
+                                    items={menuData.publishers}
+                                    queryKey="publisher"
+                                    activeMenu={activeMenu}
+                                    setActiveMenu={setActiveMenu}
+                                />
+                                <Link href={'/all-books'}>All Books</Link>
+                            </>
+                        )}
                     </div>
 
-                    {/* Shopping cart */}
-                    <div className="flex gap-2">
+                    {/* Right Side */}
+                    <div className="flex items-center gap-3">
                         <Cart />
-                        <MdOutlineAccountCircle size={25} className="text-green-700 cursor-pointer" />
+
+                        <MdOutlineAccountCircle
+                            size={26}
+                            className="cursor-pointer text-green-700"
+                        />
+
+                        {/* Mobile Menu Button */}
+                        <button
+                            className="lg:hidden"
+                            onClick={() => setMobileOpen(true)}
+                        >
+                            <Menu size={26} />
+                        </button>
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Drawer */}
+            {mobileOpen && (
+                <div className="fixed inset-0 z-[999] bg-white overflow-y-auto">
+                    <div className="flex items-center justify-between p-4 border-b">
+                        <h2 className="text-xl font-bold">Menu</h2>
+
+                        <button onClick={() => setMobileOpen(false)}>
+                            <X size={28} />
+                        </button>
+                    </div>
+
+                    <div className="p-4 space-y-8">
+                        {/* Categories */}
+                        <div>
+                            <h3 className="mb-3 font-bold text-green-700">
+                                Categories
+                            </h3>
+
+                            <div className="space-y-2">
+                                {menuData.categories.map((item) => (
+                                    <Link
+                                        key={item._id}
+                                        href={`/books?category=${item._id}`}
+                                        onClick={() =>
+                                            setMobileOpen(false)
+                                        }
+                                        className="block py-2 border-b"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Authors */}
+                        <div>
+                            <h3 className="mb-3 font-bold text-green-700">
+                                Authors
+                            </h3>
+
+                            <div className="space-y-2">
+                                {menuData.authors.map((item) => (
+                                    <Link
+                                        key={item._id}
+                                        href={`/books?author=${item._id}`}
+                                        onClick={() =>
+                                            setMobileOpen(false)
+                                        }
+                                        className="block py-2 border-b"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Publishers */}
+                        <div>
+                            <h3 className="mb-3 font-bold text-green-700">
+                                Publishers
+                            </h3>
+
+                            <div className="space-y-2">
+                                {menuData.publishers.map((item) => (
+                                    <Link
+                                        key={item._id}
+                                        href={`/books?publisher=${item._id}`}
+                                        onClick={() =>
+                                            setMobileOpen(false)
+                                        }
+                                        className="block py-2 border-b"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </nav>
     );
 }

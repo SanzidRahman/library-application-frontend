@@ -1,17 +1,37 @@
+'use client'
+
+import { addToCart } from "@/redux/reducer/cartReducer";
 import Image from "next/image";
-import { FaHeart } from "react-icons/fa";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function BookCard({ book }) {
-    const discount =
-        book.price - book.discountPrice;
+    const [quantity, setQuantity] = useState(1);
+    const dispatch = useDispatch();
+
+    console.log(book)
+
+    const handleAddToCart = () => {
+        const cartItem = {
+            bookId: book._id,
+            title: book.title,
+            price: book.discountPrice || book.price,
+            qty: quantity,
+        };
+        dispatch(addToCart(cartItem));
+        alert("Book added to cart!");
+    };
+
+
+    const discount = book.price - book.discountPrice;
 
     return (
-        <div className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition">
+        <div className="bg-white rounded-xl overflow-hidden shadow hover:shadow-green-800 transition">
 
             <div className="relative">
 
                 <Image
-                    src={book.media.secureUrl}
+                    src={book?.media?.secureUrl}
                     alt={book.title}
                     width={300}
                     height={400}
@@ -42,9 +62,6 @@ export default function BookCard({ book }) {
                     {book.author?.name}
                 </p>
 
-                <p className="text-sm text-gray-500">
-                    {book.publisher?.name}
-                </p>
 
                 <div className="flex items-center gap-2 mt-3">
                     <span className="font-bold text-lg text-green-600">
@@ -63,15 +80,14 @@ export default function BookCard({ book }) {
                 <div className="flex gap-2 mt-4">
 
                     <button
+                        onClick={() => handleAddToCart(dispatch(addToCart()))}
                         disabled={book.stock === 0}
-                        className="flex-1 bg-black text-white py-2 rounded-lg disabled:bg-gray-300"
+                        className="flex-1 bg-black text-white hover:bg-black/60 cursor-pointer transition-all duration-200 py-2 rounded-lg disabled:bg-gray-300"
                     >
                         Add To Cart
                     </button>
 
-                    <button className="border p-2 rounded-lg">
-                        <FaHeart />
-                    </button>
+
                 </div>
             </div>
         </div>

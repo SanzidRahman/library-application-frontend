@@ -1,29 +1,13 @@
 import SearchBar from "@/components/HomepageSearch";
-import MegaNavbar from "@/components/megaNavbar";
+import { getCategoryBooks, getFeaturedBooks } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
 
-async function getFeaturedBooks() {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/books?limit=8&sort=popular`,
-      {
-        next: {
-          revalidate: 60,
-        },
-      }
-    );
 
-    const data = await res.json();
-
-    return data.data || [];
-  } catch {
-    return [];
-  }
-}
 
 export default async function HomePage() {
   const books = await getFeaturedBooks();
+
 
 
   return (
@@ -74,19 +58,16 @@ export default async function HomePage() {
 
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           {[
-            "Programming",
-            "Islamic",
-            "Science",
-            "History",
-            "Novel",
-            "Kids",
+            { name: "Programming", slug: "programming" },
+            { name: "Islamic", slug: "islamic" },
+            { name: "Science", slug: "science" },
           ].map((category) => (
             <Link
-              key={category}
-              href={`/books?category=${category}`}
+              key={category.slug}
+              href={`/books?category=${category.slug}`}
               className="rounded-xl border p-3 text-center font-medium transition hover:bg-indigo-600 hover:text-white"
             >
-              {category}
+              {category.name}
             </Link>
           ))}
         </div>

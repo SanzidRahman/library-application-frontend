@@ -4,7 +4,7 @@ import BookCard from "@/components/BookCard";
 import FilterContent from "@/components/FilterContent";
 import { useBooks } from "@/hooks/useBooks";
 import { FiFilter, FiX } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDebounce } from "use-debounce";
 import { useFilters } from "@/hooks/useFilter";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -23,6 +23,29 @@ export default function BooksPage() {
     const urlSearch = searchParams.get("search") || "";
 
     const [search, setSearch] = useState(urlSearch);
+    const [debouncedSearch] = useDebounce(search, 500);
+
+    useEffect(() => {
+        setSearch(urlSearch);
+    }, [urlSearch]);
+
+    useEffect(() => {
+        const currentSearch = searchParams.get("search") || "";
+
+        if (currentSearch === debouncedSearch) return;
+
+        const params = new URLSearchParams(searchParams.toString());
+
+        if (debouncedSearch.trim()) {
+            params.set("search", debouncedSearch.trim());
+        } else {
+            params.delete("search");
+        }
+
+        params.set("page", "1");
+
+        router.replace(`?${params.toString()}`);
+    }, [debouncedSearch, router]);
 
     const updateParams = (key, value) => {
 
@@ -41,12 +64,12 @@ export default function BooksPage() {
         router.push(`?${params.toString()}`);
     };
 
+
     const resetFilters = () => {
         router.push("?");
         setSearch("");
     };
 
-    const [debouncedSearch] = useDebounce(search, 500);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
     // API Call
@@ -69,9 +92,6 @@ export default function BooksPage() {
     const authors = filters?.authors || [];
     const publishers = filters?.publishers || [];
 
-
-
-
     // Props for FilterContent
     const filterProps = {
         search,
@@ -87,7 +107,6 @@ export default function BooksPage() {
         updateParams,
         resetFilters,
     };
-
 
     return (
         <div className="container mx-auto px-4 py-8">

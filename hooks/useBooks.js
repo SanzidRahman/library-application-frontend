@@ -7,7 +7,7 @@ export const useBooks = (params) => {
 
         queryFn: async () => {
             const { data } = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/books/all-books`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/books/`,
                 { params }
             );
             return data;
