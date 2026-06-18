@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
 import useFetch from "@/hooks/useFetch";
-import { FaShoppingCart } from "react-icons/fa";
 import { MdOutlineAccountCircle } from "react-icons/md";
 import Cart from "./Cart";
 
@@ -108,6 +107,9 @@ export default function MegaNavbar() {
                         {renderSection("Categories", menuData.categories, "categories", "category")}
                         {renderSection("Authors", menuData.authors, "authors", "author")}
                         {renderSection("Publishers", menuData.publishers, "publishers", "publisher")}
+                        <Link href={"/fundamental-books"}> Fundamental</Link>
+                        <Link href={"/new-books"}> New Books</Link>
+                        <Link href={"/all-books"}> All Books</Link>
                     </div>
 
                     {/* Shopping cart */}

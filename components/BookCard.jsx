@@ -1,0 +1,79 @@
+import Image from "next/image";
+import { FaHeart } from "react-icons/fa";
+
+export default function BookCard({ book }) {
+    const discount =
+        book.price - book.discountPrice;
+
+    return (
+        <div className="bg-white rounded-xl overflow-hidden shadow hover:shadow-xl transition">
+
+            <div className="relative">
+
+                <Image
+                    src={book.media.secureUrl}
+                    alt={book.title}
+                    width={300}
+                    height={400}
+                    className="w-full h-72 object-cover"
+                    priority
+                />
+
+                {book.discountPercentage > 0 && (
+                    <span className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">
+                        {book.discountPercentage}% OFF
+                    </span>
+                )}
+
+                {book.stock === 0 && (
+                    <span className="absolute top-2 right-2 bg-black text-white text-xs px-2 py-1 rounded">
+                        Out Of Stock
+                    </span>
+                )}
+            </div>
+
+            <div className="p-4">
+
+                <h3 className="font-bold line-clamp-2">
+                    {book.title}
+                </h3>
+
+                <p className="text-sm text-gray-500 mt-1">
+                    {book.author?.name}
+                </p>
+
+                <p className="text-sm text-gray-500">
+                    {book.publisher?.name}
+                </p>
+
+                <div className="flex items-center gap-2 mt-3">
+                    <span className="font-bold text-lg text-green-600">
+                        ৳{book.discountPrice}
+                    </span>
+
+                    <span className="line-through text-gray-400">
+                        ৳{book.price}
+                    </span>
+
+                    <span className="text-red-500 text-sm">
+                        Save ৳{discount}
+                    </span>
+                </div>
+
+                <div className="flex gap-2 mt-4">
+
+                    <button
+                        disabled={book.stock === 0}
+                        className="flex-1 bg-black text-white py-2 rounded-lg disabled:bg-gray-300"
+                    >
+                        Add To Cart
+                    </button>
+
+                    <button className="border p-2 rounded-lg">
+                        <FaHeart />
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
