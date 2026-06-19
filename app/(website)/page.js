@@ -1,14 +1,18 @@
 import SearchBar from "@/components/HomepageSearch";
-import { getCategoryBooks, getFeaturedBooks } from "@/lib/helper";
+import { getFeaturedBooks } from "@/lib/helper";
 import Image from "next/image";
 import Link from "next/link";
-
 
 
 export default async function HomePage() {
   const books = await getFeaturedBooks();
 
-
+  const uniqueCategories = books.reduce((acc, book) => {
+    if (!acc.find((c) => c._id === book.category._id)) {
+      acc.push(book.category);
+    }
+    return acc;
+  }, []);
 
   return (
     <main>
@@ -56,20 +60,17 @@ export default async function HomePage() {
           Browse Categories
         </h2>
 
-        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-          {[
-            { name: "Programming", slug: "programming" },
-            { name: "Islamic", slug: "islamic" },
-            { name: "Science", slug: "science" },
-          ].map((category) => (
+        <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+          {uniqueCategories.map((category) => (
             <Link
-              key={category.slug}
-              href={`/books?category=${category.slug}`}
+              key={category._id}
+              href={`/books?category=${category._id}`}
               className="rounded-xl border p-3 text-center font-medium transition hover:bg-indigo-600 hover:text-white"
             >
               {category.name}
             </Link>
           ))}
+
         </div>
       </section>
 
@@ -82,7 +83,7 @@ export default async function HomePage() {
             </h2>
 
             <Link
-              href="/books"
+              href="/all-books"
               className="font-medium text-indigo-600"
             >
               View All
@@ -103,6 +104,7 @@ export default async function HomePage() {
                   alt={book.title}
                   height={300}
                   width={300}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   className="h-72 w-full object-cover"
                 />
 
@@ -121,7 +123,7 @@ export default async function HomePage() {
                     </span>
 
                     <Link
-                      href={`/books/${book.slug}`}
+                      href={`/books/${book._id}`}
                       className="rounded bg-indigo-600 px-3 py-2 text-white"
                     >
                       Details

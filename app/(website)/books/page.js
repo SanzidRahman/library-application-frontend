@@ -39,6 +39,8 @@ const BooksPage = () => {
         router.push(`/books?${params.toString()}`);
     };
 
+    console.log(books)
+
     if (loading) return <div>Loading...</div>;
 
     return (
@@ -70,7 +72,7 @@ const BooksPage = () => {
                         <h3 className="font-medium">{book.title}</h3>
 
                         <p className="text-xs text-gray-500">
-                            {book.category?.name}
+                            {book.category.name}
                         </p>
                     </Link>
                 ))}
