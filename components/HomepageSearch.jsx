@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/lib/api";
 
 export default function SearchBar() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -47,7 +48,7 @@ export default function SearchBar() {
                 setLoading(true);
 
                 const res = await fetch(
-                    `http://localhost:8000/api/search?q=${encodeURIComponent(
+                    `${API_URL}/api/search?q=${encodeURIComponent(
                         searchTerm
                     )}`
                 );

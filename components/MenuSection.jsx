@@ -23,7 +23,7 @@ export default function MenuSection({
             setActiveMenu(null);
         }, 200);
     };
-    console.log(items)
+
     return (
         <div
             className="relative"

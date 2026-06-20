@@ -5,6 +5,7 @@ import { addToCart } from "@/redux/reducer/cartReducer";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Image from "next/image"; // ✅ Import Next.js Image
+import { API_URL } from "@/lib/api";
 
 const BookDetails = ({ params }) => {
     const { id } = React.use(params);
@@ -13,7 +14,7 @@ const BookDetails = ({ params }) => {
     const [quantity, setQuantity] = useState(1);
 
     const { data: response, loading, error } = useFetch(
-        `http://localhost:8000/api/books/${id}`
+        `${API_URL}/api/books/${id}`
     );
 
     if (loading) return <p className="text-gray-500">Loading...</p>;

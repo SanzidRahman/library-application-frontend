@@ -8,6 +8,7 @@ import Select from "@/components/Select";
 import useFetch from "@/hooks/useFetch";
 import { ADMIN_BOOKS_ADD } from "@/lib/AdminPanelRoute";
 import Image from "next/image";
+import { API_URL } from "@/lib/api";
 
 const BooksAddPage = () => {
     const [preview, setPreview] = useState("");
@@ -16,17 +17,11 @@ const BooksAddPage = () => {
         { label: "Add Books", href: ADMIN_BOOKS_ADD },
     ];
 
-    const { data: getCategory } = useFetch(
-        "http://localhost:8000/api/categories"
-    );
+    const { data: getCategory } = useFetch(`${API_URL}/api/categories`);
+    const { data: getPublisher } = useFetch(`${API_URL}/api/publishers`);
+    const { data: getAuthor } = useFetch(`${API_URL}/api/authors`);
 
-    const { data: getPublisher } = useFetch(
-        "http://localhost:8000/api/publishers"
-    );
 
-    const { data: getAuthor } = useFetch(
-        "http://localhost:8000/api/authors"
-    );
 
     // Category Options
     const categoryOptions = useMemo(() => {
@@ -138,8 +133,7 @@ const BooksAddPage = () => {
                 data.append("picture", formData.picture);
             }
 
-            const res = await axios.post(
-                "http://localhost:8000/api/books",
+            const res = await axios.post(`${API_URL}/api/books`,
                 data,
                 {
                     headers: {

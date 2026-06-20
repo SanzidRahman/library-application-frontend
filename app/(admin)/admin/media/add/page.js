@@ -2,6 +2,7 @@
 
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ADMIN_MEDIA_ADD } from "@/lib/AdminPanelRoute";
+import { API_URL } from "@/lib/api";
 import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
@@ -45,7 +46,7 @@ const Media = () => {
             formData.append("picture", file);
 
             const response = await axios.post(
-                "http://localhost:8000/api/media/upload",
+                `${API_URL}/api/media/upload`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },

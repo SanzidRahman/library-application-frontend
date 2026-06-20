@@ -8,13 +8,14 @@ import { MdOutlineAccountCircle } from "react-icons/md";
 import useFetch from "@/hooks/useFetch";
 import Cart from "./Cart";
 import MenuSection from "./MenuSection";
+import { API_URL } from "@/lib/api";
 
 export default function MegaNavbar() {
     const [activeMenu, setActiveMenu] = useState(null);
     const [mobileOpen, setMobileOpen] = useState(false);
 
     const { data: response, loading } = useFetch(
-        "http://localhost:8000/api/mega-menu"
+        `${API_URL}/api/mega-menu`
     );
 
     const menuData = response?.data || {

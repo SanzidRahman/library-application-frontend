@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ADMIN_CATEGORY_SHOW } from "@/lib/AdminPanelRoute";
+import { API_URL } from "@/lib/api";
 
 const CategoryShowPage = () => {
   const breadcrumbItems = [
@@ -18,7 +19,7 @@ const CategoryShowPage = () => {
     const fetchauthors = async () => {
       try {
         const res = await axios.get(
-          `http://localhost:8000/api/publishers`
+          `${API_URL}/api/publishers`
         );
         setAuthors(res.data);
       } catch (error) {

@@ -3,7 +3,7 @@
 import { addToCart } from "@/redux/reducer/cartReducer";
 import Image from "next/image";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 
 export default function BookCard({ book }) {
     const [quantity, setQuantity] = useState(1);

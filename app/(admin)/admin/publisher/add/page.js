@@ -2,6 +2,7 @@
 
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ADMIN_AUTHORS_ADD, ADMIN_CATEGORY_ADD, ADMIN_PUBLISHER_ADD } from "@/lib/AdminPanelRoute";
+import { API_URL } from "@/lib/api";
 import axios from "axios";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ const AuthorsAddPage = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `http://localhost:8000/api/publishers`,
+                `${API_URL}/api/publishers`,
                 formData
             );
 

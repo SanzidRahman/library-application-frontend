@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import useFetch from "@/hooks/useFetch";
+import { API_URL } from "@/lib/api";
 
 const BooksPage = () => {
     const searchParams = useSearchParams();
@@ -18,7 +19,7 @@ const BooksPage = () => {
     const page = searchParams.get("page") || 1;
 
     // build API URL dynamically
-    const apiUrl = `http://localhost:8000/api/books?category=${category || ""}&author=${author || ""}&publisher=${publisher || ""}&search=${search || ""}&page=${page}`;
+    const apiUrl = `${API_URL}/api/books?category=${category || ""}&author=${author || ""}&publisher=${publisher || ""}&search=${search || ""}&page=${page}`;
 
     const { data, loading } = useFetch(apiUrl);
 
@@ -39,7 +40,7 @@ const BooksPage = () => {
         router.push(`/books?${params.toString()}`);
     };
 
-    console.log(books)
+
 
     if (loading) return <div>Loading...</div>;
 

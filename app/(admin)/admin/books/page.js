@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ADMIN_CATEGORY_SHOW } from "@/lib/AdminPanelRoute";
+import { API_URL } from "@/lib/api";
 
 const BooksShowPage = () => {
   const breadcrumbItems = [
@@ -18,7 +19,7 @@ const BooksShowPage = () => {
     const fetchBooks = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8000/api/books"
+          `${API_URL}/api/books`
         );
 
         setBooks(res?.data?.data || []);
@@ -32,7 +33,7 @@ const BooksShowPage = () => {
     fetchBooks();
   }, []);
 
-  console.log(books)
+
 
   return (
     <div className="p-4 md:p-6">

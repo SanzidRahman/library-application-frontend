@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import { API_URL } from "@/lib/api";
 
 export const useBooks = (params) => {
     return useQuery({
@@ -7,7 +8,7 @@ export const useBooks = (params) => {
 
         queryFn: async () => {
             const { data } = await axios.get(
-                `${process.env.NEXT_PUBLIC_API_URL}/api/books/`,
+                `${API_URL}/api/books/`,
                 { params }
             );
             return data;

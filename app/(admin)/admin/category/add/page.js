@@ -2,6 +2,7 @@
 
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ADMIN_CATEGORY_ADD } from "@/lib/AdminPanelRoute";
+import { API_URL } from "@/lib/api";
 import axios from "axios";
 import { useState } from "react";
 
@@ -42,7 +43,7 @@ const CategoryAddPage = () => {
         e.preventDefault();
         try {
             const res = await axios.post(
-                `http://localhost:8000/api/categories`,
+                `${API_URL}/api/categories`,
                 formData
             );
 

@@ -5,6 +5,7 @@ import axios from "axios";
 import Image from "next/image";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { ADMIN_MEDIA_ADD } from "@/lib/AdminPanelRoute";
+import { API_URL } from "@/lib/api";
 
 const MediaGallery = () => {
   const breadcrumbItems = [
@@ -18,7 +19,7 @@ const MediaGallery = () => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/media");
+        const response = await axios.get(`${API_URL}/api/media`);
         // ✅ Use response.data.media because your API wraps images inside "media"
         setImages(response.data.media);
       } catch (error) {
