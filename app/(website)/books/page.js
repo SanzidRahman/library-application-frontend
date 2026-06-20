@@ -25,6 +25,8 @@ const BooksPage = () => {
 
     const books = data?.data || [];
 
+    console.log(books)
+
     // ---------------- SEARCH HANDLER ----------------
     const handleSearch = () => {
         const params = new URLSearchParams(searchParams.toString());
